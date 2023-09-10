@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <title>Tay</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Taif's Daily Goals</h1>
+
+    <img id="success-image" src="girl.png" alt="Success Image" style="display: none;">
+
+    <div class="input-container">
+        <form action="{{ url_for('add') }}" method="post" onsubmit="return validateForm();">
+            <div class="input-box">
+                <input type="text" name="todo" id="todo-input" placeholder="Enter your goal">
+                <button type="submit">Add</button>
+            </div>
+        </form>
+    </div>
+
+    <ul>
+        {% for todo in todos %}
+        <li class="todo-item">
+            <div class="todo-content">
+                <label>
+                    <input type="checkbox" name="done" {% if todo['done'] %} checked {% endif %} disabled>
+                    <span {% if todo['done'] %} class="completed" {% endif %}> {{ todo['task'] }}</span>
+                </label>
+            </div>
+            <div class="button-group">
+                <a class="button-link check-link check-button" href="{{ url_for('check', index=loop.index0) }}">Check</a>
+                <a class="button-link edit-button" href="{{ url_for('edit', index=loop.index0) }}">Edit</a>
+                <a class="button-link delete-button" href="{{ url_for('delete', index=loop.index0) }}">Delete</a>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        // Function to validate the form before submission using jQuery
+        function validateForm() {
+            const inputValue = $('#todo-input').val().trim();
+
+            if (inputValue === "") {
+                alert("Please enter a goal before adding.");
+                return false; // Prevent form submission
+            }
+            return true; // Allow form submission
+        }
+
+       
+    </script>
+</body>
+</html>
